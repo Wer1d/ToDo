@@ -1,11 +1,15 @@
 using Microsoft.AspNetCore.Mvc;
 using ToDo.Models;
 using ToDo.DTOs;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Cryptography;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using System.Text;
 
 namespace ToDo.Controllers;
 
 [ApiController]
-[Route("[users]")]
+[Route("[controller]")]
 public class UsersController : ControllerBase
 {
     private readonly ILogger<UsersController> _logger;
@@ -14,16 +18,16 @@ public class UsersController : ControllerBase
         _logger = logger;
     }
 
-    [HttpGet]
+    [HttpGet("{id}")]
     public IActionResult Get(uint id)
     {
         var db = new ToDoDbContext();
-        var user = db.User.FirstOrDefault(u => u.Id == id);
+        var user = db.User.Find(id);
         if (user == null) return NotFound("Not found");
         return Ok(user);
     }
-
-    public IActionResult GetAll()
+    [HttpGet]
+    public IActionResult Get()
     {
         var db = new ToDoDbContext();
         var users = db.User.ToList();
@@ -32,44 +36,66 @@ public class UsersController : ControllerBase
     }
 
     [HttpPost]
-    [Route("register")]
-    public IActionResult Post([FromBody] DTOs.Login data)
+    
+    public IActionResult Post([FromBody] DTOs.UserDTO data)
     {   
         if (data == null) return BadRequest();  
     
         var db = new ToDoDbContext();
-        var user = db.User.FirstOrDefault(u => u.Username == data.Username);
-        if (user != null) return Conflict(new { msg = "Username already exists" });
-
+        var salt = CreateSalt();
+        var hash = GenerateHash( salt,data.Password);
         var newUser = new Models.User{
             Username = data.Username,
-            Password = data.Password
+            Password = hash,
+            Salt = salt
         };
         db.User.Add(newUser);
         db.SaveChanges();
         return CreatedAtAction(nameof(Get), new { id = newUser.Id }, "User registered successfully.");
-
     }
     
+    private string CreateSalt()
+    {
+        byte[] randomBytes = new byte[128 / 8];
+        var generator = RandomNumberGenerator.Create();
+        generator.GetBytes(randomBytes);
+        return Convert.ToBase64String(randomBytes);
+        
+    }
 
-    [HttpPut]
-    public IActionResult Update(uint id,[FromBody] DTOs.Login data)
+    private string GenerateHash(string salt, string password)
+    {
+        string hash = Convert.ToBase64String(
+            KeyDerivation.Pbkdf2(
+                password: password,
+                salt: Encoding.UTF8.GetBytes(salt),
+                prf: KeyDerivationPrf.HMACSHA256,
+                iterationCount: 10000,
+                numBytesRequested: 32
+            )
+        );
+        return hash;
+    }
+
+   [HttpPut("{id}")]
+    public IActionResult Update(uint id,[FromBody] DTOs.UserDTO data)
     {
         var db = new ToDoDbContext();
         var user = db.User.FirstOrDefault(u => u.Id == id);
         if (user == null) return NotFound("user not found");
+        var hash = GenerateHash(user.Salt,data.Password);
         user.Username = data.Username;
-        user.Password = data.Password;
+        user.Password = hash;
         db.SaveChanges();
         return Ok("user updated successfully");
     }
-    [HttpDelete]
+    [HttpDelete("{id}")]
+
     public IActionResult Delete(uint id)
     {
         var db = new ToDoDbContext();
         var user = db.User.Find(id);
-        if (user == null) return NotFound("user not found");
-
+        if (user == null) return NotFound();
         db.User.Remove(user);
         db.SaveChanges();
         return Ok("user deleted successfully");

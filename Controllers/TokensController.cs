@@ -7,6 +7,7 @@ using System.IdentityModel.Tokens.Jwt;
 using Microsoft.OpenApi.Models;
 using ToDo.Models;
 using ToDo.DTOs;
+using System.Security.Cryptography;
 
 namespace ToDo.Controllers;
 
@@ -22,28 +23,33 @@ public class TokensController : ControllerBase
 
     [HttpPost]
     [Route("")]
+
     public IActionResult Post([FromBody] DTOs.Login login)
     {   
 
         var db = new ToDoDbContext();
-        var user = db.User.Find(login.Username);
+
+        // primary key is Id of user that why we cant use Find()
+        var users = db.User.ToList();
+        var user = null as Models.User;
+        foreach (var tempUser in users)
+        {
+            if (tempUser.Username == login.UserName)
+            {
+                user = tempUser;
+                break;
+            }
+        }
         if (user == null) return Unauthorized(new { msg = "Invalid username or password" });
 
-        string hash = Convert.ToBase64String(
-            KeyDerivation.Pbkdf2(
-                password: login.Password,
-                salt: Convert.FromBase64String(user.Salt),
-                prf: KeyDerivationPrf.HMACSHA1,
-                iterationCount: 10000,
-                numBytesRequested: 256 / 8
-            )
-        );
+        string hash = GenerateHash(user.Salt, login.Password);
         if (user.Password != hash) return Unauthorized(new { msg = "Invalid username or password" });
         var desc = new SecurityTokenDescriptor();
         desc.Subject = new ClaimsIdentity(
             new Claim[] {
-            new Claim(ClaimTypes.Name, user.Id),
-            new Claim(ClaimTypes.Role, "user")
+                new Claim(ClaimTypes.Name, user.Username),
+                new Claim(ClaimTypes.Name, user.Id.ToString()),
+                new Claim(ClaimTypes.Role, "user")
         });
         desc.Expires = DateTime.UtcNow.AddMinutes(30);
         desc.NotBefore = DateTime.UtcNow;
@@ -57,6 +63,29 @@ public class TokensController : ControllerBase
         var handler = new JwtSecurityTokenHandler();
         var token = handler.CreateToken(desc);
 
-        return Ok(new { token = handler.WriteToken(token) });
+        return Ok(new { token = handler.WriteToken(token) , role = "user"});
+    }
+
+    private string CreateSalt()
+    {
+        byte[] randomBytes = new byte[128 / 8];
+        var generator = RandomNumberGenerator.Create();
+        generator.GetBytes(randomBytes);
+        return Convert.ToBase64String(randomBytes);
+        
+    }
+
+    private string GenerateHash(string salt, string password)
+    {
+        string hash = Convert.ToBase64String(
+            KeyDerivation.Pbkdf2(
+                password: password,
+                salt: Encoding.UTF8.GetBytes(salt),
+                prf: KeyDerivationPrf.HMACSHA256,
+                iterationCount: 10000,
+                numBytesRequested: 32
+            )
+        );
+        return hash;
     }
 }
