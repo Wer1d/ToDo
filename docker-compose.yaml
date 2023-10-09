@@ -1,0 +1,34 @@
+version: "3.7"
+
+services:
+  mariadb:
+    container_name: mariadb
+    image: mariadb:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: passw0rd
+      MYSQL_DATABASE: ToDo
+      lower_case_table_names: "2" 
+    restart: always
+    expose:
+      - 3306
+    ports:
+      - 3306:3306
+    volumes:
+      - mariadb_data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql      # # docker-compose down -v to remove the volume and container 
+
+  todoapp:
+    container_name: todoapp
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 5180:80
+    depends_on:
+      - mariadb
+    
+volumes:
+  mariadb_data:
+
+
+

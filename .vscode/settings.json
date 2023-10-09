@@ -6,13 +6,27 @@
                 "enableSsl": "Disabled"
             },
             "previewLimit": 50,
+            "server": "192.168.224.2",
+            "port": 3306,
+            "driver": "MariaDB",
+            "name": "d",
+            "database": "ToDo",
+            "username": "root",
+            "password": "passw0rd"
+        },
+        {
+            "mysqlOptions": {
+                "authProtocol": "default",
+                "enableSsl": "Disabled"
+            },
+            "previewLimit": 50,
             "server": "127.0.0.1",
             "port": 3306,
             "driver": "MariaDB",
-            "name": "mdb_ToDoApp",
-            "username": "root",
+            "name": "todo",
             "database": "ToDo",
-            "askForPassword": true
+            "username": "root",
+            "password": "passw0rd"
         }
     ]
 }

@@ -1,1 +1,1 @@
-SELECT * FROM Activity
+SELECT * FROM  Activity

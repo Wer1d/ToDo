@@ -1,0 +1,27 @@
+CREATE USER 'admin'@'%' IDENTIFIED BY 'admin';
+GRANT ALL PRIVILEGES ON *.* TO 'admin'@'%' WITH GRANT OPTION;
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;
+
+GRANT ALL ON ToDo.* TO 'root'@'%' IDENTIFIED BY 'passw0rd';
+GRANT ALL ON ToDo.* TO 'admin'@'%' IDENTIFIED BY 'admin';
+
+CREATE DATABASE IF NOT EXISTS ToDo;
+
+-- Set the default database to ToDo
+USE ToDo;
+
+CREATE TABLE User (
+    Id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    Username VARCHAR(44) NOT NULL COLLATE utf8mb4_thai_520_w2,
+    Password VARCHAR(44) NOT NULL COLLATE utf8mb4_thai_520_w2,
+    Salt VARCHAR(24) NOT NULL COLLATE utf8mb4_thai_520_w2
+);
+
+-- Create the Activity table with foreign key
+CREATE TABLE Activity (
+    Id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    UserId INT UNSIGNED,
+    Name VARCHAR(444) COLLATE utf8mb4_thai_520_w2,
+    `When` DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (UserId) REFERENCES User(Id)
+);

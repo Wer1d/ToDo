@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ToDo</name>
+    </assembly>
+    <members>
+        <member name="M:ToDo.Controllers.ActivitesController.Get">
+            <summary>
+            get activity by id according to token.userId
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ToDo.Controllers.ActivitesController.Post(ToDo.DTOs.Activity)">
+            <summary>
+            need only activityName and when
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ToDo.Controllers.TokensController.Post(ToDo.DTOs.Login)">
+            <summary>
+             Generate Token by giving username and password
+            </summary>
+            <param name="request" >Hi</param>
+            <example>Cloudy with a chance of rain</example>
+            <returns></returns>
+        </member>
+        <member name="M:ToDo.Controllers.UsersController.Get">
+            <summary>Get all users </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ToDo.Controllers.UsersController.Post(ToDo.DTOs.UserDTO)">
+            <summary>Add new use</summary>
+            <returns></returns>
+        </member>
+        <member name="P:ToDo.DTOs.Activity.ActivityName">
+            <example>ทานข้าว</example>
+        </member>
+        <member name="P:ToDo.DTOs.Login.UserName">
+            <example>Alex</example>
+        </member>
+        <member name="P:ToDo.DTOs.Login.Password">
+            <example>12345</example>
+        </member>
+        <member name="P:ToDo.DTOs.UserDTO.Username">
+            <example>Bernard</example>
+        </member>
+        <member name="P:ToDo.DTOs.UserDTO.Password">
+            <example>12345</example>
+        </member>
+        <member name="T:ToDo.Migrations.initialmigration">
+            <inheritdoc />
+        </member>
+        <member name="M:ToDo.Migrations.initialmigration.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:ToDo.Migrations.initialmigration.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:ToDo.Migrations.initialmigration.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+    </members>
+</doc>

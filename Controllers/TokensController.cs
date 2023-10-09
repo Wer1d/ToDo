@@ -8,6 +8,7 @@ using Microsoft.OpenApi.Models;
 using ToDo.Models;
 using ToDo.DTOs;
 using System.Security.Cryptography;
+using Swashbuckle.AspNetCore.Filters;
 
 namespace ToDo.Controllers;
 
@@ -21,10 +22,16 @@ public class TokensController : ControllerBase
         _logger = logger;
     }
 
+    /// <summary>
+    ///  Generate Token by giving username and password
+    /// </summary>
+    /// <param name="request" >Hi</param>
+    /// <example>Cloudy with a chance of rain</example>
+
+    /// <returns></returns>
     [HttpPost]
     [Route("")]
-
-    public IActionResult Post([FromBody] DTOs.Login login)
+        public IActionResult Post([FromBody] DTOs.Login login)
     {   
 
         var db = new ToDoDbContext();
@@ -47,8 +54,8 @@ public class TokensController : ControllerBase
         var desc = new SecurityTokenDescriptor();
         desc.Subject = new ClaimsIdentity(
             new Claim[] {
-                new Claim(ClaimTypes.Name, user.Username),
                 new Claim(ClaimTypes.Name, user.Id.ToString()),
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Role, "user")
         });
         desc.Expires = DateTime.UtcNow.AddMinutes(30);
@@ -65,7 +72,7 @@ public class TokensController : ControllerBase
 
         return Ok(new { token = handler.WriteToken(token) , role = "user"});
     }
-
+    
     private string CreateSalt()
     {
         byte[] randomBytes = new byte[128 / 8];

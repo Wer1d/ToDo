@@ -17,7 +17,7 @@ public class UsersController : ControllerBase
     {
         _logger = logger;
     }
-
+    
     [HttpGet("{id}")]
     public IActionResult Get(uint id)
     {
@@ -26,6 +26,9 @@ public class UsersController : ControllerBase
         if (user == null) return NotFound("Not found");
         return Ok(user);
     }
+
+    /// <summary>Get all users </summary>
+    /// <returns></returns>
     [HttpGet]
     public IActionResult Get()
     {
@@ -34,9 +37,10 @@ public class UsersController : ControllerBase
         if (!users.Any()) return NoContent();
         return Ok(users);
     }
-
-    [HttpPost]
     
+    /// <summary>Add new use</summary>
+    /// <returns></returns>
+    [HttpPost]
     public IActionResult Post([FromBody] DTOs.UserDTO data)
     {   
         if (data == null) return BadRequest();  
@@ -53,7 +57,7 @@ public class UsersController : ControllerBase
         db.SaveChanges();
         return CreatedAtAction(nameof(Get), new { id = newUser.Id }, "User registered successfully.");
     }
-    
+        
     private string CreateSalt()
     {
         byte[] randomBytes = new byte[128 / 8];

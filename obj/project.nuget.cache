@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "Lb3TOmUsmEO4Zu8CadKIiGOSVconBE1++hNc9Kj4Wk/JM4akluTJOXhWwUvYabgfkFNKdG754oFVJ4NqO/fF9Q==",
+  "dgSpecHash": "3HXpftV4+vE0zyFJl/2JpvXftkVwp+LZENxRcj7z2btRlX4A2lO7IvjLlg3CQ1QP18THRAQOjs50nv987ekF3g==",
   "success": true,
   "projectFilePath": "C:\\Users\\Thany\\OneDrive\\Desktop\\ToDo\\ToDo.csproj",
   "expectedPackageFiles": [
@@ -37,7 +37,10 @@
     "C:\\Users\\Thany\\.nuget\\packages\\mono.texttemplating\\2.2.1\\mono.texttemplating.2.2.1.nupkg.sha512",
     "C:\\Users\\Thany\\.nuget\\packages\\mysqlconnector\\2.2.5\\mysqlconnector.2.2.5.nupkg.sha512",
     "C:\\Users\\Thany\\.nuget\\packages\\pomelo.entityframeworkcore.mysql\\7.0.0\\pomelo.entityframeworkcore.mysql.7.0.0.nupkg.sha512",
+    "C:\\Users\\Thany\\.nuget\\packages\\scrutor\\3.3.0\\scrutor.3.3.0.nupkg.sha512",
     "C:\\Users\\Thany\\.nuget\\packages\\swashbuckle.aspnetcore\\6.5.0\\swashbuckle.aspnetcore.6.5.0.nupkg.sha512",
+    "C:\\Users\\Thany\\.nuget\\packages\\swashbuckle.aspnetcore.filters\\7.0.0\\swashbuckle.aspnetcore.filters.7.0.0.nupkg.sha512",
+    "C:\\Users\\Thany\\.nuget\\packages\\swashbuckle.aspnetcore.filters.abstractions\\7.0.0\\swashbuckle.aspnetcore.filters.abstractions.7.0.0.nupkg.sha512",
     "C:\\Users\\Thany\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\6.5.0\\swashbuckle.aspnetcore.swagger.6.5.0.nupkg.sha512",
     "C:\\Users\\Thany\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\6.5.0\\swashbuckle.aspnetcore.swaggergen.6.5.0.nupkg.sha512",
     "C:\\Users\\Thany\\.nuget\\packages\\swashbuckle.aspnetcore.swaggerui\\6.5.0\\swashbuckle.aspnetcore.swaggerui.6.5.0.nupkg.sha512",
